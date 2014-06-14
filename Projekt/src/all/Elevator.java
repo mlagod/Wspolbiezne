@@ -3,6 +3,8 @@ package all;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import static all.Direction.*;
+
 
 public class Elevator extends Thread {
 	
@@ -13,7 +15,7 @@ public class Elevator extends Thread {
 	final int FULL = 5; // tyle osob pomiesci winda
 	int ileOsob = 0;
 	
-	int kierunek; // 1 = winda jedzie w gore, -1 = winda jedzie w dol
+	Direction kierunek; // 1 = winda jedzie w gore, -1 = winda jedzie w dol
 	
 	Lock blokada = new ReentrantLock();
 	
@@ -59,13 +61,13 @@ public class Elevator extends Thread {
 				
 				for(int i = minFloor; i < maxFloor; i++){
 					
-					kierunek = 1;
+					kierunek = Up;
 					aktualnePietro = i;  // winda jest na pietrze
 					
 					
 					
 					if(aktualnePietro == maxFloor){
-						kierunek = -1;
+						kierunek = Down;
 					}
 					
 					// aktualizacja pietra napis
@@ -82,11 +84,11 @@ public class Elevator extends Thread {
 				
 				for(int i = maxFloor; i > minFloor; i--){
 					
-					kierunek = -1;
+					kierunek = Down;
 					aktualnePietro = i;
 					
 					if(i == minFloor){
-						kierunek = 1;
+						kierunek = Up;
 					}
 					
 					for(int j = 0; j < Start.licznikTekstow; j++){
@@ -102,7 +104,7 @@ public class Elevator extends Thread {
 			}else if(rodzaj == 2){
 				
 				aktualnePietro = 0;
-				kierunek = 1;
+				kierunek = Up;
 				
 				akcjaWindy();
 				
@@ -114,12 +116,12 @@ public class Elevator extends Thread {
 				}
 				for(int i = minFloor; i < maxFloor; i++){
 					
-					kierunek = 1;
+					kierunek = Up;
 					aktualnePietro = i;
 					
 					if(aktualnePietro == maxFloor){
 						
-						kierunek = -1;
+						kierunek = Down;
 					}
 					
 					for(int j = 0; j < Start.licznikTekstow; j++){
@@ -134,7 +136,7 @@ public class Elevator extends Thread {
 				
 				for(int i = maxFloor; i >= minFloor; i--){
 					
-					kierunek = -1;
+					kierunek = Down;
 					aktualnePietro = i;
 					
 					for(int j = 0; j < Start.licznikTekstow; j++){
@@ -149,7 +151,7 @@ public class Elevator extends Thread {
 				
 				if(aktualnePietro == minFloor){   
 					aktualnePietro = 0;
-					kierunek = 1;
+					kierunek = Up;
 					
 					
 					
@@ -166,18 +168,18 @@ public class Elevator extends Thread {
 			}else if(rodzaj == 3){
 				
 				aktualnePietro = 0;
-				kierunek = -1;
+				kierunek = Down;
 				
 				akcjaWindy();
 				
 				for(int i = 0; i > minFloor; i--){
 					
-					kierunek = -1;
+					kierunek = Down;
 					aktualnePietro = i;
 					
 					if(aktualnePietro == minFloor){
 						
-						kierunek = 1;
+						kierunek = Up;
 					}
 					
 					for(int j = 0; j < Start.licznikTekstow; j++){
@@ -193,11 +195,11 @@ public class Elevator extends Thread {
 				
 				for(int i = minFloor; i < maxFloor; i++){
 					
-					kierunek = 1;
+					kierunek = Up;
 					aktualnePietro = i;
 					
 					if(i == maxFloor){
-						kierunek = -1;
+						kierunek = Down;
 					}
 					
 					for(int j = 0; j < Start.licznikTekstow; j++){
@@ -235,7 +237,7 @@ public class Elevator extends Thread {
 		
 		
 	
-		try{
+		try{	// wysiada z windy, przestawia reached = true, osoba dodaje sie do odpowiedniej kolejki w metodzie Person.akcja
 			
 		for(int i = 0; i < Start.kolejkaOut[aktualnePietro].size();i++){
 			
@@ -247,7 +249,6 @@ public class Elevator extends Thread {
 				validate();
 				blokada.unlock();
 				
-				// todo: dodawanie do kolejki na pietrze
 				
 			}
 		}
@@ -287,10 +288,10 @@ public class Elevator extends Thread {
 					Start.kolejkaOut[Start.listaPasazerow.get(k).cel].add(Start.listaPasazerow.get(k));
 					ileOsob++;
 					
-					if(Start.listaPasazerow.get(k).kierunekPasazera == 1){
+					if(Start.listaPasazerow.get(k).kierunekPasazera == Up){
 						Start.kolejkaUp[aktualnePietro].poll();
 					
-					}else if(Start.listaPasazerow.get(k).kierunekPasazera == -1){
+					}else if(Start.listaPasazerow.get(k).kierunekPasazera == Down){
 						
 						Start.kolejkaDown[aktualnePietro].poll();
 					}
@@ -308,10 +309,10 @@ public class Elevator extends Thread {
 						Start.kolejkaOut[Start.liczbaPieter - Start.listaPasazerow.get(k).cel].add(Start.listaPasazerow.get(k));
 						ileOsob++;
 						
-						if(Start.listaPasazerow.get(k).kierunekPasazera == 1){
+						if(Start.listaPasazerow.get(k).kierunekPasazera == Up){
 							Start.kolejkaUp[Start.liczbaPieter - aktualnePietro].poll();
 						
-						}else if(Start.listaPasazerow.get(k).kierunekPasazera == -1){
+						}else if(Start.listaPasazerow.get(k).kierunekPasazera == Down){
 							
 							Start.kolejkaDown[Start.liczbaPieter - aktualnePietro].poll();
 						}

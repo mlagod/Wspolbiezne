@@ -18,17 +18,22 @@ public class Start {
 	public static int liczbaWind;
 	
 	static List<Elevator> listaWind = new ArrayList<Elevator>();
-	//static List<Thread> watkiWind = new ArrayList<Thread>();
 	static List<Person> listaPasazerow = new ArrayList<Person>();
 	
 	static List<JPanel> panel = new ArrayList<JPanel>();
 	static List<JLabel> nazwy = new ArrayList<JLabel>();
 	static List<JLabel> pietra = new ArrayList<JLabel>();
 	static List<JLabel> osoby = new ArrayList<JLabel>();
+	static List<JLabel> pasazerowieWwindzie = new ArrayList<JLabel>();  // 
+	
+	
+	static List<JLabel>[] osobyInElevator;
 	
 	static List<Person>[] kolejkaOut;  //kolejka osob w windzie wysiadajacych na i-tym pietrze
 	static Queue<Person>[] kolejkaUp;	// kolejka osob jadacych do gory na i-tym pietrze
 	static Queue<Person>[] kolejkaDown; // kolejka osob jadacych na dol na i-tym pietrze
+	
+	
 	
 	static int licznikTekstow;
 
@@ -51,6 +56,7 @@ public void dzialaj(){
 		kolejkaOut = new List[liczbaPieter+3];	// dwa ostatnie miejsca listy to pietra podziemne
 		kolejkaUp = new Queue[liczbaPieter+3];
 		kolejkaDown = new Queue[liczbaPieter+3];
+		osobyInElevator = new List[liczbaWind];
 		
 		//tworzenie kolejek
 		for(int i = 0; i < liczbaPieter+3; i++){
@@ -73,6 +79,10 @@ public void dzialaj(){
 					
 					pietra.add(new JLabel()); 
 					licznikTekstow++;
+					
+					pasazerowieWwindzie.add(new JLabel("Pasazerowie w windzie : "));
+					
+					
 					
 					if(listaWind.get(i).rodzaj == 1){
 					
@@ -105,22 +115,40 @@ public void dzialaj(){
 						
 						pietra.get(i).setText("      Winda jest na pietrze: ");
 					}
+					
+					//wyswietlanie osob w windzie
+					osobyInElevator[i] = new ArrayList<JLabel>();
+					osobyInElevator[i].add(new JLabel());
+					
+						for(int j = 0; j < osobyInElevator[i].size(); j++){
+
+							panel.get(i).add(osobyInElevator[i].get(j));
+						}
 				}
-				/*
+				
 				for(int i = 0; i < liczbaWind; i++){
 					
-					watkiWind.add(new Thread(listaWind.get(i)));
-				}*/
+					panel.get(i).add(pasazerowieWwindzie.get(i));
+				}
 				
 				
 				for(int i = 0; i < liczbaPasazerow; i++){
 					
-					listaPasazerow.add(new Person(""+i));
-					listaPasazerow.get(i).start();
+					
+					listaPasazerow.add(new Person(""+ i));
+					
 				}
+				
+				
 				
 				for(int i = 0; i < liczbaWind; i++){
 					listaWind.get(i).start();
+				}
+				
+for(int i = 0; i < liczbaPasazerow; i++){
+					
+					listaPasazerow.get(i).start();
+					
 				}
 
 }

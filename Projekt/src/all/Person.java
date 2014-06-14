@@ -1,5 +1,5 @@
-package all;
 
+package all;
 import java.util.Random;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -10,12 +10,14 @@ public class Person extends Thread {
 
 	int pietro;
 	int cel;
-	boolean reached = true;
-	int kierunekPasazera; // 1 - gora, -1 = dol
+	boolean reached;
+	Direction kierunekPasazera; // 1 - gora, -1 = dol
 	String name;
 	
+	 static Random r = new Random();
+	
 	public Person(String s){
-		name = s;
+		name = s;		
 		
 		Start.osoby.add(new JLabel(name));
 	}
@@ -28,17 +30,18 @@ public class Person extends Thread {
 	}
 	
 	
-	private void losujPietroStart(){
+	private synchronized void losujPietroStart(){
 		
-		Random r = new Random();
 		pietro = r.nextInt(Start.liczbaPieter+3);
 		pietro -= 2;
 		
+		
+		
 	}
 	
-	private void losujPietroCel(){
+	private synchronized void losujPietroCel(){
 		
-		Random r = new Random();
+	//	Random r = new Random();
 		cel = r.nextInt(Start.liczbaPieter+3);
 		cel -= 2;
 		
@@ -48,24 +51,33 @@ public class Person extends Thread {
 		}
 		
 		if(cel > pietro){	// chce jechac do gory
-			kierunekPasazera = 1;
+			kierunekPasazera = Direction.Up;
 		}else if(cel < pietro){
-			kierunekPasazera = -1;
+			
+			kierunekPasazera = Direction.Down;
 		}
 		
 		reached = false;
+		
+		
 	}
 	
 	public void akcja(){
-		
+
 		losujPietroStart();
 		
 		while(true){
 			
 			if(reached == true){
-				losujPietroCel();
 				
-				if(kierunekPasazera == 1){	//jesli chce jechac do gory, dodaj do kolejki do gory
+				losujPietroCel();				
+				
+				// wyswietlanie stanu pasazerow
+				for(int i = 0; i < Start.osoby.size(); i++){
+					Start.osoby.get(i).setText("osoba " + i + " : " + pietro + " -> " + cel + ";           ");
+				}
+				
+				if(kierunekPasazera == Direction.Up){	//jesli chce jechac do gory, dodaj do kolejki do gory
 					
 					try{
 					
@@ -80,7 +92,7 @@ public class Person extends Thread {
 						lock.unlock();
 					}
 					
-				}else if(kierunekPasazera == -1){	// jesli chce jechac do dolu, dodaj do kolejki do dolu
+				}else if(kierunekPasazera == Direction.Down){	// jesli chce jechac do dolu, dodaj do kolejki do dolu
 					
 					try{
 					

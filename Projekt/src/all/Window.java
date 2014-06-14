@@ -1,15 +1,15 @@
 package all;
 
-import java.awt.BorderLayout;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SpringLayout;
+import javax.swing.SwingConstants;
+
 
 public class Window {
 	
@@ -19,21 +19,19 @@ public class Window {
 
 		
 		
-	JFrame okno = new JFrame("Programowanie wspó³bie¿ne - Mateusz £agód");	
+	JFrame okno = new JFrame("Programowanie wspolbiezne - Mateusz Lagod");	
 	
 	Dimension d = new Dimension(200,200);
 	Dimension pas = new Dimension(600,100);
 	
 	JPanel pasazerPanel = new JPanel();
-	JLabel pasazerLabel = new JLabel("Pasazerowie");
-	
-	
+	JLabel pasazerLabel = new JLabel("<html>Pasazerowie<br>                         </html>");
 	
 	okno.setLayout(new FlowLayout());
 	pasazerPanel.setLayout(new FlowLayout());
 	
 	pasazerPanel.setPreferredSize(pas);
-	pasazerPanel.setBackground(Color.gray);
+	pasazerPanel.setBackground(Color.blue);
 	
 	pasazerPanel.add(pasazerLabel);
 	
